@@ -2,15 +2,15 @@
 /* -------------------------------------------------------
     NODEJS EXPRESS | Hotel Api
 ------------------------------------------------------- */
-// User Controller:
+// Rooms Controller:
 
-const User = require("../models/user");
+const Room = require("../models/room");
 
 module.exports = {
   list: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "List Users"
+            #swagger.tags = ["Rooms"]
+            #swagger.summary = "List Rooms"
             #swagger.description = `
                 You can send query with endpoint for filter[], search[], sort[], page and limit.
                 <ul> Examples:
@@ -22,11 +22,11 @@ module.exports = {
             `
         */
 
-    const data = await res.getModelList(User);
+    const data = await res.getModelList(Room);
 
     res.status(200).send({
       error: false,
-      details: await res.getModelListDetails(User),
+      details: await res.getModelListDetails(Room),
       data,
     });
   },
@@ -35,11 +35,11 @@ module.exports = {
 
   create: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Create User"
+            #swagger.tags = ["Rooms"]
+            #swagger.summary = "Create Room"
         */
 
-    const data = await User.create(req.body);
+    const data = await Room.create(req.body);
 
     res.status(201).send({
       error: false,
@@ -49,11 +49,11 @@ module.exports = {
 
   read: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Get Single User"
+            #swagger.tags = ["Rooms"]
+            #swagger.summary = "Get Single Room"
         */
 
-    const data = await User.findOne({ _id: req.params.id });
+    const data = await Room.findOne({ _id: req.params.id });
 
     res.status(200).send({
       error: false,
@@ -63,28 +63,28 @@ module.exports = {
 
   update: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Update User"
+            #swagger.tags = ["Rooms"]
+            #swagger.summary = "Update Room"
         */
 
-    const data = await User.updateOne({ _id: req.params.id }, req.body, {
+    const data = await Room.updateOne({ _id: req.params.id }, req.body, {
       runValidators: true,
     });
 
     res.status(202).send({
       error: false,
       data,
-      new: await User.findOne({ _id: req.params.id }),
+      new: await Room.findOne({ _id: req.params.id }),
     });
   },
 
   delete: async (req, res) => {
     /*
-            #swagger.tags = ["Users"]
-            #swagger.summary = "Delete User"
+            #swagger.tags = ["Rooms"]
+            #swagger.summary = "Delete Room"
         */
 
-    const data = await User.deleteOne({ _id: req.params.id });
+    const data = await Room.deleteOne({ _id: req.params.id });
 
     res.status(data.deletedCount ? 204 : 404).send({
       error: !data.deletedCount,
