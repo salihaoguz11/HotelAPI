@@ -1,29 +1,27 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
-    NODEJS EXPRESS | CLARUSWAY FullStack Team
+    NODEJS EXPRESS | Hotel Api
 ------------------------------------------------------- */
-const router = require('express').Router()
+const router = require("express").Router();
 /* ------------------------------------------------------- */
 // ROUTER INDEX:
 
 // URL: /
 
 // auth:
-router.use('/auth', require('./auth'))
+router.use("/auth", require("./auth"));
 // user:
-router.use('/users', require('./user'))
+router.use("/users", require("./user"));
 // token:
-router.use('/tokens', require('./token'))
+router.use("/tokens", require("./token"));
 
 // order:
-router.use('/orders', require('./order'))
+router.use("/reservations", require("./reservation"));
 // pizza:
-router.use('/pizzas', require('./pizza'))
-// topping:
-router.use('/toppings', require('./topping'))
+router.use("/rooms", require("./room"));
 
 // document:
-router.use('/documents', require('./document'))
+router.use("/documents", require("./document"));
 
 /* ------------------------------------------------------- */
-module.exports = router
+module.exports = router;

@@ -4,19 +4,20 @@
 ------------------------------------------------------- */
 const router = require("express").Router();
 /* ------------------------------------------------------- */
-// routes/auth:
+// routes/reservation:
 
-const auth = require("../controllers/auth");
+const reservation = require("../controllers/reservation");
 
-const passwordEncrypt = require("../helpers/passwordEncrypt");
-const jwt = require("jsonwebtoken");
+// URL: /reservations
 
-// URL: /auth
+router.route("/").get(reservation.list).post(reservation.create);
 
-// Login/logout:
-router.post("/login", auth.login);
-// router.all('/logout', auth.logout)
-router.get("/logout", auth.logout);
+router
+  .route("/:id")
+  .get(reservation.read)
+  .put(reservation.update)
+  .patch(reservation.update)
+  .delete(reservation.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;

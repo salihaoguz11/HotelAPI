@@ -4,19 +4,20 @@
 ------------------------------------------------------- */
 const router = require("express").Router();
 /* ------------------------------------------------------- */
-// routes/auth:
+// routes/room:
 
-const auth = require("../controllers/auth");
+const room = require("../controllers/room");
 
-const passwordEncrypt = require("../helpers/passwordEncrypt");
-const jwt = require("jsonwebtoken");
+// URL: /pizzas
 
-// URL: /auth
+router.route("/").get(room.list).post(room.create);
 
-// Login/logout:
-router.post("/login", auth.login);
-// router.all('/logout', auth.logout)
-router.get("/logout", auth.logout);
+router
+  .route("/:id")
+  .get(room.read)
+  .put(room.update)
+  .patch(room.update)
+  .delete(room.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;
