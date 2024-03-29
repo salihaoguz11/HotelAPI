@@ -7,6 +7,7 @@
 const User = require("../models/user");
 const Token = require("../models/token");
 const passwordEncrypt = require("../helpers/passwordEncrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
   login: async (req, res) => {
@@ -26,7 +27,8 @@ module.exports = {
 
     const { username, email, password } = req.body;
     if ((username || email) && password) {
-      const user = await User.findOne({ $or: [{ username, email }] });
+      const user = await User.findOne({ $or: [{ username }, { email }] });
+      // console.log(user);
       if (user && user.password == passwordEncrypt(password)) {
         if (user.isActive) {
           /* SIMPLE TOKEN */
@@ -40,9 +42,48 @@ module.exports = {
             });
           }
           /* SIMPLE TOKEN */
+
+          /* JWT  */
+
+          const accessInfo = {
+            key: process.env.ACCESS_KEY,
+            time: process.env?.ACCESS_EXP || "30s",
+            data: {
+              _id: user._id,
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+              isActive: user.isActive,
+              isAdmin: user.isAdmin,
+            },
+          };
+          const refreshInfo = {
+            key: process.env.REFRESH_KEY,
+            time: process.env?.REFRESH_EXP || "3d",
+            data: {
+              id: user.id,
+              password: user.password,
+            },
+          };
+          // jwt.sign(access_data, access_key, { expiresIn: '30m' })
+
+          const accessToken = jwt.sign(accessInfo.data, accessInfo.key, {
+            expiresIn: accessInfo.time,
+          });
+          const refreshToken = jwt.sign(refreshInfo.data, refreshInfo.key, {
+            expiresIn: refreshInfo.time,
+          });
+
+          /* JWT  */
+
           res.status(200).send({
             error: false,
             token: tokenData.token,
+            beraer: {
+              access: accessToken,
+              refresh: refreshToken,
+            },
             user,
           });
         }

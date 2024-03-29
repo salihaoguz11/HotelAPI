@@ -5,6 +5,7 @@
 // Reservation Controller:
 
 const Reservation = require("../models/reservation");
+const Room = require("../models/room");
 
 module.exports = {
   list: async (req, res) => {
@@ -31,6 +32,7 @@ module.exports = {
     });
   },
 
+  // ! BOŞ ODALARA GÖRE
   // CRUD:
 
   create: async (req, res) => {
@@ -39,12 +41,27 @@ module.exports = {
             #swagger.summary = "Create Reservation"
         */
 
-    const data = await Reservation.create(req.body);
+    const checkRoom = await Room.findOne({ _id: req.body.roomId });
+    console.log(checkRoom.isEmpty);
+    if (checkRoom && checkRoom.isEmpty) {
+      const data = await Reservation.create(req.body);
+      console.log(data);
 
-    res.status(201).send({
-      error: false,
-      data,
-    });
+      const updateData = await Room.updateOne(
+        { _id: data.roomId },
+        { isEmpty: false }
+      );
+      res.status(201).send({
+        error: false,
+        data,
+        checkRoom,
+      });
+    } else {
+      res.status(200).send({
+        error: false,
+        message: "the room is not empty",
+      });
+    }
   },
 
   read: async (req, res) => {
